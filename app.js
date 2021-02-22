@@ -15,13 +15,15 @@ const getTask = () => db.collection('tasks').get()
 // callback es un objeto
 const onGetTasks = (callback) => db.collection('tasks').onSnapshot(callback)
 
+const deleteTask = id => db.collection('tasks').doc(id).delete()
+
 window.addEventListener('DOMContentLoaded', async e => {
     //const querySnapshot = await getTask()
     
     onGetTasks((querySnapshot) => {
         $tasksContainer.innerHTML = ""
         querySnapshot.forEach(doc => {
-            //console.log(doc.data())
+            console.log(doc.data())
             const task = doc.data()
             task.id = doc.id
             $tasksContainer.innerHTML += `
@@ -38,9 +40,10 @@ window.addEventListener('DOMContentLoaded', async e => {
             //console.log(btnsDelete)
 
             btnsDelete.forEach((btn) => {
-                btn.addEventListener('click',(e)=> {
+                btn.addEventListener('click',async (e)=> {
                     //console.log('clicked ok')
-                    console.log(e.target.dataset.id)
+                    //console.log(e.target.dataset.id)
+                    await deleteTask(e.target.dataset.id)
                 })
             })
         })
